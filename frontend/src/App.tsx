@@ -5,6 +5,7 @@ import {
   TaobaoOutlined,
   UserOutlined,
   WeiboOutlined,
+  ArrowRightOutlined,
 } from '@ant-design/icons';
 import {
   LoginFormPage,
@@ -29,6 +30,7 @@ const iconStyles: CSSProperties = {
 const LoginPage = () => {
   const [loginType, setLoginType] = useState<LoginType>('phone');
   const { token } = theme.useToken();
+  const [showIcon, setShowIcon] = useState(false);
   return (
     <div
       style={{
@@ -47,26 +49,23 @@ const LoginPage = () => {
         }}
         subTitle="全球最大的代码托管平台"
         activityConfig={{
-          style: {
-            boxShadow: '0px 0px 8px rgba(0, 0, 0, 0.2)',
-            color: token.colorTextHeading,
-            borderRadius: 8,
-            backgroundColor: 'rgba(255,255,255,0.25)',
-            backdropFilter: 'blur(4px)',
-          },
-          title: '活动标题，可配置图片',
-          subTitle: '活动介绍说明文字',
           action: (
             <Button
               size="large"
+              href='https://www.pm25oo.top'
+              target='_blank'
+              // icon={<ArrowRightOutlined />}
               style={{
                 borderRadius: 20,
                 background: token.colorBgElevated,
                 color: token.colorPrimary,
                 width: 120,
               }}
+              onMouseEnter={() => setShowIcon(true)}
+              onMouseLeave={() => setShowIcon(false)}
             >
-              去看看
+              {!showIcon && 'Visit my site'}
+              {showIcon && <ArrowRightOutlined />}
             </Button>
           ),
         }}
