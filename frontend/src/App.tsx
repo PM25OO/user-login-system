@@ -1,3 +1,4 @@
+import { NavLink } from "react-router";
 import {
   AlipayOutlined,
   LockOutlined,
@@ -6,6 +7,7 @@ import {
   UserOutlined,
   WeiboOutlined,
   ArrowRightOutlined,
+  PieChartFilled,
 } from '@ant-design/icons';
 import {
   LoginFormPage,
@@ -28,7 +30,7 @@ const iconStyles: CSSProperties = {
 };
 
 const LoginPage = () => {
-  const [loginType, setLoginType] = useState<LoginType>('phone');
+  const [loginType, setLoginType] = useState<LoginType>('account');
   const { token } = theme.useToken();
   const [showIcon, setShowIcon] = useState(false);
   return (
@@ -40,14 +42,14 @@ const LoginPage = () => {
     >
       <LoginFormPage
         backgroundImageUrl="https://mdn.alipayobjects.com/huamei_gcee1x/afts/img/A*y0ZTS6WLwvgAAAAAAAAAAAAADml6AQ/fmt.webp"
-        logo="https://github.githubassets.com/favicons/favicon.png"
+        logo={<PieChartFilled style={{ fontSize: 40, color: 'white' }} />}
         backgroundVideoUrl="https://gw.alipayobjects.com/v/huamei_gcee1x/afts/video/jXRBRK_VAwoAAAAAAAAAAAAAK4eUAQBr"
-        title="Github"
+        title="LoginWebpage"
         containerStyle={{
           backgroundColor: 'rgba(0, 0, 0,0.65)',
           backdropFilter: 'blur(4px)',
         }}
-        subTitle="全球最大的代码托管平台"
+        subTitle="TEST ONLY"
         activityConfig={{
           action: (
             <Button
@@ -86,7 +88,7 @@ const LoginPage = () => {
                   fontSize: 14,
                 }}
               >
-                其他登录方式
+                其他登录方式(未开发)
               </span>
             </Divider>
             <Space align="center" size={24}>
@@ -136,13 +138,16 @@ const LoginPage = () => {
           </div>
         }
       >
+        <NavLink to="/home" end>
+        Home
+      </NavLink>
         <Tabs
           centered
           activeKey={loginType}
           onChange={(activeKey) => setLoginType(activeKey as LoginType)}
         >
           <Tabs.TabPane key={'account'} tab={'账号密码登录'} />
-          <Tabs.TabPane key={'phone'} tab={'手机号登录'} />
+          <Tabs.TabPane key={'phone'} tab={'手机号登录(未开发)'} />
         </Tabs>
         {loginType === 'account' && (
           <>
@@ -159,7 +164,7 @@ const LoginPage = () => {
                   />
                 ),
               }}
-              placeholder={'用户名: admin or user'}
+              placeholder={'用户名'}
               rules={[
                 {
                   required: true,
@@ -180,7 +185,7 @@ const LoginPage = () => {
                   />
                 ),
               }}
-              placeholder={'密码: ant.design'}
+              placeholder={'密码'}
               rules={[
                 {
                   required: true,
