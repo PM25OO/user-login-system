@@ -56,7 +56,6 @@ const LoginPage = () => {
               size="large"
               href='https://www.pm25oo.top'
               target='_blank'
-              // icon={<ArrowRightOutlined />}
               style={{
                 borderRadius: 20,
                 background: token.colorBgElevated,
@@ -139,7 +138,7 @@ const LoginPage = () => {
         }
       >
         <NavLink to="/home" end>
-        Home
+        Hack!!!
       </NavLink>
         <Tabs
           centered
@@ -214,11 +213,11 @@ const LoginPage = () => {
               rules={[
                 {
                   required: true,
-                  message: '请输入手机号！',
+                  message: '哈基米！',
                 },
                 {
                   pattern: /^1\d{10}$/,
-                  message: '手机号格式错误！',
+                  message: '哈！',
                 },
               ]}
             />

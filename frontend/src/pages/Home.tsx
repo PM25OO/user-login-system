@@ -9,14 +9,15 @@ const HomePage = () => {
       height: '100vh', 
       display: 'flex', 
       alignItems: 'center', 
-      justifyContent: 'center' 
+      justifyContent: 'center', 
+      backgroundColor: '#F0F0F0'
     }}>
       <Result
         status="success"
-        title="登录成功！"
+        title="登录成功!"
         subTitle="欢迎来到主页面"
         extra={[
-          <Button type="primary" key="back" onClick={() => navigate('/')}>
+          <Button type="primary" key="back" onClick={() => navigate('/login')}>
             返回登录页
           </Button>,
         ]}
