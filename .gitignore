@@ -1,0 +1,20 @@
+# Node/Vite 前端构建文件
+node_modules/
+dist/
+
+# IDEA / VSCode 配置
+*.iml
+.idea/
+.vscode/
+.DS_Store
+
+# Java / Spring Boot 构建文件
+target/
+*.log
+
+# MySQL 数据文件（docker volume 映射）
+database/data/
+
+# 其他可能生成的临时文件
+*.tmp
+*.bak
