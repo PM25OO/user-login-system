@@ -1,0 +1,41 @@
+package com.example.backend.controller;
+
+import com.example.backend.entity.User;
+import com.example.backend.repository.UserRepository;
+import com.example.backend.service.UserService;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
+import java.util.Optional;
+
+@RestController
+@RequestMapping("/auth")
+public class UserController {
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
+
+    // Register API
+    @PostMapping("/register")
+    public User register(@RequestBody Map<String, String> body) {
+        String username = body.get("username");
+        String email = body.get("email");
+        String password = body.get("password");
+        return userService.register(username, email, password);
+    }
+
+    // Login API
+    @PostMapping("/login")
+    public String login(@RequestBody Map<String, String> body) {
+        String username = body.get("username");
+        String password = body.get("password");
+
+        Optional<User>  user = userService.login(username, password);
+
+        return user.isPresent() ? "Login success: "  + user.get().getUsername()
+                                : "Login failed: invalid username or password";
+    }
+
+}
