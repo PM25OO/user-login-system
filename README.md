@@ -1,5 +1,18 @@
 # 简易用户登录系统
 ---
+
+## 启动💻  
+- 前端
+```
+npm install
+npm run dev
+```
+- 数据库（Docker）
+```
+docker compose up -d
+docker exec -it userdb mysql -u user -p
+```
+
 ## 项目结构🗂️
 ```
 user-login-system/
