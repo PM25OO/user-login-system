@@ -5,6 +5,7 @@ import com.example.backend.repository.UserRepository;
 import com.example.backend.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -29,14 +30,24 @@ public class UserController {
 
     // Login API
     @PostMapping("/login")
-    public String login(@RequestBody Map<String, String> body) {
+    public Map<String, Object> login(@RequestBody Map<String, String> body) {
         String username = body.get("username");
         String password = body.get("password");
 
-        Optional<User>  user = userService.login(username, password);
+        Optional<User> user = userService.login(username, password);
 
-        return user.isPresent() ? "Login success: "  + user.get().getUsername()
-                                : "Login failed: invalid username or password";
+        Map<String, Object> response = new HashMap<>();
+        if (user.isPresent()) {
+            response.put("success", true);
+            response.put("message", "Login success");
+            response.put("username", user.get().getUsername());
+        } else {
+            response.put("success", false);
+            response.put("message", "Invalid username or password");
+        }
+
+        return response;  // Spring会自动转为JSON
     }
+
 
 }

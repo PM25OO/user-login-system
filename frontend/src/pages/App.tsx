@@ -19,6 +19,7 @@ import {
 import { Button, Divider, Space, Tabs, message, theme } from 'antd';
 import type { CSSProperties } from 'react';
 import { useState } from 'react';
+import api from '../api/api';
 
 type LoginType = 'phone' | 'account';
 
@@ -37,26 +38,18 @@ const LoginPage = () => {
 
   const handleLogin = async (values: { username: string; password: string }) => {
     try {
-      const response = await fetch("http://localhost:8080/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(values), // values 就是 {username, password}
-      });
+      const res = await api.post("/auth/login", values);
 
-      if (!response.ok) {
-        throw new Error("登录请求失败");
-      }
-
-      const result = await response.text(); // 后端返回字符串
-      if (result.includes("success")) {
+      // 后端返回格式：{ success: true, message: "...", username: {...} }
+      if (res.data?.success) {
         message.success("登录成功！");
-        navigate("/home"); // ✅ 登录成功跳转
+        navigate("/home"); // 跳转到首页
       } else {
-        message.error("用户名或密码错误");
+        message.error(res.data?.message || "用户名或密码错误");
       }
-    } catch (err) {
-      console.error(err);
-      message.error("服务器连接失败");
+    } catch (error: any) {
+      console.error("登录失败:", error);
+      message.error(error.response?.data?.message || "服务器错误");
     }
   };
 
