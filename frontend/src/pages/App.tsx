@@ -1,4 +1,4 @@
-import { NavLink } from "react-router";
+import { NavLink, useNavigate } from "react-router";
 import {
   AlipayOutlined,
   LockOutlined,
@@ -33,6 +33,33 @@ const LoginPage = () => {
   const [loginType, setLoginType] = useState<LoginType>('account');
   const { token } = theme.useToken();
   const [showIcon, setShowIcon] = useState(false);
+  const navigate = useNavigate();
+
+  const handleLogin = async (values: { username: string; password: string }) => {
+    try {
+      const response = await fetch("http://localhost:8080/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(values), // values 就是 {username, password}
+      });
+
+      if (!response.ok) {
+        throw new Error("登录请求失败");
+      }
+
+      const result = await response.text(); // 后端返回字符串
+      if (result.includes("success")) {
+        message.success("登录成功！");
+        navigate("/home"); // ✅ 登录成功跳转
+      } else {
+        message.error("用户名或密码错误");
+      }
+    } catch (err) {
+      console.error(err);
+      message.error("服务器连接失败");
+    }
+  };
+
   return (
     <div
       style={{
@@ -41,6 +68,7 @@ const LoginPage = () => {
       }}
     >
       <LoginFormPage
+        onFinish={handleLogin}
         backgroundImageUrl="https://mdn.alipayobjects.com/huamei_gcee1x/afts/img/A*y0ZTS6WLwvgAAAAAAAAAAAAADml6AQ/fmt.webp"
         logo={<PieChartFilled style={{ fontSize: 40, color: 'white' }} />}
         backgroundVideoUrl="https://gw.alipayobjects.com/v/huamei_gcee1x/afts/video/jXRBRK_VAwoAAAAAAAAAAAAAK4eUAQBr"
