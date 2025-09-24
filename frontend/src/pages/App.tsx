@@ -34,6 +34,7 @@ const LoginPage = () => {
   const [loginType, setLoginType] = useState<LoginType>('account');
   const { token } = theme.useToken();
   const [showIcon, setShowIcon] = useState(false);
+  const [messageApi, contextHolder] = message.useMessage();
   const navigate = useNavigate();
 
   const handleLogin = async (values: { username: string; password: string }) => {
@@ -45,6 +46,7 @@ const LoginPage = () => {
         message.success("登录成功！");
         navigate("/home"); // 跳转到首页
       } else {
+        messageApi.error("登录失败，请检查用户名和密码。");
         message.error(res.data?.message || "用户名或密码错误");
       }
     } catch (error: any) {
@@ -60,6 +62,7 @@ const LoginPage = () => {
         height: '100vh',
       }}
     >
+      {contextHolder}
       <LoginFormPage
         onFinish={handleLogin}
         backgroundImageUrl="https://mdn.alipayobjects.com/huamei_gcee1x/afts/img/A*y0ZTS6WLwvgAAAAAAAAAAAAADml6AQ/fmt.webp"
