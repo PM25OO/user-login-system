@@ -22,6 +22,7 @@ import { useState } from 'react';
 import api from '../api/api';
 
 type LoginType = 'phone' | 'account';
+type AccessType = 'login' | 'register';
 
 const iconStyles: CSSProperties = {
   color: 'rgba(0, 0, 0, 0.2)',
@@ -32,6 +33,7 @@ const iconStyles: CSSProperties = {
 
 const LoginPage = () => {
   const [loginType, setLoginType] = useState<LoginType>('account');
+  const [accessType, setAccessType] = useState<AccessType>('login');
   const { token } = theme.useToken();
   const [showIcon, setShowIcon] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
@@ -43,15 +45,14 @@ const LoginPage = () => {
 
       // 后端返回格式：{ success: true, message: "...", username: {...} }
       if (res.data?.success) {
-        message.success("登录成功！");
+        messageApi.success("登录成功！");
         navigate("/home"); // 跳转到首页
       } else {
         messageApi.error("登录失败，请检查用户名和密码。");
-        message.error(res.data?.message || "用户名或密码错误");
       }
     } catch (error: any) {
+      messageApi.error("Bad Connection to Server");
       console.error("登录失败:", error);
-      message.error(error.response?.data?.message || "服务器错误");
     }
   };
 
@@ -64,6 +65,11 @@ const LoginPage = () => {
     >
       {contextHolder}
       <LoginFormPage
+        submitter={{
+          searchConfig: {
+            submitText: accessType === 'login' ? '登录' : '注册',
+          }
+        }}
         onFinish={handleLogin}
         backgroundImageUrl="https://mdn.alipayobjects.com/huamei_gcee1x/afts/img/A*y0ZTS6WLwvgAAAAAAAAAAAAADml6AQ/fmt.webp"
         logo={<PieChartFilled style={{ fontSize: 40, color: 'white' }} />}
@@ -162,16 +168,30 @@ const LoginPage = () => {
         }
       >
         <NavLink to="/home" end>
-        Hack!!!
-      </NavLink>
-        <Tabs
-          centered
-          activeKey={loginType}
-          onChange={(activeKey) => setLoginType(activeKey as LoginType)}
-        >
-          <Tabs.TabPane key={'account'} tab={'账号密码登录'} />
-          <Tabs.TabPane key={'phone'} tab={'手机号登录(未开发)'} />
-        </Tabs>
+          Hack!!!
+        </NavLink>
+        {accessType === 'login' && (
+          <>
+            <Tabs
+              centered
+              activeKey={loginType}
+              onChange={(activeKey) => setLoginType(activeKey as LoginType)}
+            >
+              <Tabs.TabPane key={'account'} tab={'账号密码登录'} />
+              <Tabs.TabPane key={'phone'} tab={'手机号登录(未开发)'} />
+            </Tabs>
+          </>
+        )}
+        {accessType === 'register' && (
+          <>
+            <Tabs
+              centered
+            >
+              <Tabs.TabPane key={'register'} tab={'注册'} />
+            </Tabs>
+          </>
+        )}
+
         {loginType === 'account' && (
           <>
             <ProFormText
@@ -294,6 +314,17 @@ const LoginPage = () => {
             }}
           >
             忘记密码
+          </a>
+          <a
+            style={{
+              float: 'right',
+              marginRight: 16,
+            }}
+            onClick={() =>
+              setAccessType(accessType === 'login' ? 'register' : 'login')
+            }
+          >
+            {accessType === 'login' ? '注册新用户' : '返回登录'}
           </a>
         </div>
       </LoginFormPage>
