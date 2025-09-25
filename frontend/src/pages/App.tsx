@@ -46,7 +46,10 @@ const LoginPage = () => {
       // 后端返回格式：{ success: true, message: "...", username: {...} }
       if (res.data?.success) {
         messageApi.success("登录成功！");
-        navigate("/home"); // 跳转到首页
+        //等待0.75秒后跳转
+        setTimeout(() => {
+          navigate("/home");
+        }, 750);
       } else {
         messageApi.error("登录失败，请检查用户名和密码。");
       }
@@ -60,12 +63,12 @@ const LoginPage = () => {
     try {
       const res = await api.post("/auth/register", values);
 
-      // 后端返回格式：{ success: true, message: "...", username: {...} }
+      // 后端返回格式：{ success: boolean, message: String }
       if (res.data?.success) {
         messageApi.success("注册成功！");
-        navigate("/login"); // 跳转到登录页
+        setAccessType('login'); // 跳转到登录页
       } else {
-        messageApi.error("注册失败，请检查用户名和密码。");
+        messageApi.error("用户名或邮箱已存在");
       }
     } catch (error: any) {
       messageApi.error("Bad Connection to Server");

@@ -25,7 +25,13 @@ public class UserController {
         String username = body.get("username");
         String email = body.get("email");
         String password = body.get("password");
-        User user = userService.register(username, email, password);
+        User user;
+        try {
+            user = userService.register(username, email, password);
+        } catch (Exception e) {
+            user = null;
+        }
+
 
         Map<String, Object> response = new HashMap<>();
         if (user == null) {
