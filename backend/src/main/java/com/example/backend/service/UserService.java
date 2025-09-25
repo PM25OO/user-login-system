@@ -16,6 +16,13 @@ public class UserService {
 
     // Register
     public User register(String username, String email, String password) {
+        if (userRepository.findByUsername(username).isPresent()) {
+            throw new IllegalArgumentException("用户名已存在");
+        }
+        if (userRepository.findByEmail(email).isPresent()) {
+            throw new IllegalArgumentException("邮箱已存在");
+        }
+
         User user = new User();
         user.setUsername(username);
         user.setEmail(email);

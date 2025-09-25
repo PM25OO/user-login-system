@@ -56,6 +56,23 @@ const LoginPage = () => {
     }
   };
 
+  const handleRegister = async (values: { username: string; email: string; password: string }) => {
+    try {
+      const res = await api.post("/auth/register", values);
+
+      // 后端返回格式：{ success: true, message: "...", username: {...} }
+      if (res.data?.success) {
+        messageApi.success("注册成功！");
+        navigate("/login"); // 跳转到登录页
+      } else {
+        messageApi.error("注册失败，请检查用户名和密码。");
+      }
+    } catch (error: any) {
+      messageApi.error("Bad Connection to Server");
+      console.error("注册失败:", error);
+    }
+  };
+
   return (
     <div
       style={{
@@ -70,7 +87,9 @@ const LoginPage = () => {
             submitText: accessType === 'login' ? '登录' : '注册',
           }
         }}
-        onFinish={handleLogin}
+        {...(accessType === 'login' ? { onFinish: handleLogin }
+          : { onFinish: handleRegister }
+        )}
         backgroundImageUrl="https://mdn.alipayobjects.com/huamei_gcee1x/afts/img/A*y0ZTS6WLwvgAAAAAAAAAAAAADml6AQ/fmt.webp"
         logo={<PieChartFilled style={{ fontSize: 40, color: 'white' }} />}
         backgroundVideoUrl="https://gw.alipayobjects.com/v/huamei_gcee1x/afts/video/jXRBRK_VAwoAAAAAAAAAAAAAK4eUAQBr"
@@ -215,6 +234,33 @@ const LoginPage = () => {
                 },
               ]}
             />
+            {accessType === 'register' && (
+              <ProFormText
+                name="email"
+                fieldProps={{
+                  size: 'large',
+                  prefix: (
+                    <UserOutlined
+                      style={{
+                        color: token.colorText,
+                      }}
+                      className={'prefixIcon'}
+                    />
+                  ),
+                }}
+                placeholder={'邮箱'}
+                rules={[
+                  {
+                    required: true,
+                    message: '请输入邮箱!',
+                  },
+                  {
+                    type: 'email',
+                    message: '请输入有效的邮箱地址!',
+                  },
+                ]}
+              />
+            )}
             <ProFormText.Password
               name="password"
               fieldProps={{
@@ -308,13 +354,15 @@ const LoginPage = () => {
           <ProFormCheckbox noStyle name="autoLogin">
             自动登录
           </ProFormCheckbox>
-          <a
-            style={{
-              float: 'right',
-            }}
-          >
-            忘记密码
-          </a>
+          {accessType === 'login' && (
+            <a
+              style={{
+                float: 'right',
+              }}
+            >
+              忘记密码
+            </a>
+          )}
           <a
             style={{
               float: 'right',

@@ -21,11 +21,22 @@ public class UserController {
 
     // Register API
     @PostMapping("/register")
-    public User register(@RequestBody Map<String, String> body) {
+    public Map<String, Object> register(@RequestBody Map<String, String> body) {
         String username = body.get("username");
         String email = body.get("email");
         String password = body.get("password");
-        return userService.register(username, email, password);
+        User user = userService.register(username, email, password);
+
+        Map<String, Object> response = new HashMap<>();
+        if (user == null) {
+            response.put("success", false);
+            response.put("message", "Register failed: Existed User");
+        } else {
+            response.put("success", true);
+            response.put("message", "Register successful");
+        }
+
+        return response;
     }
 
     // Login API
