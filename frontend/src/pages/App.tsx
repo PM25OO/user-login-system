@@ -189,6 +189,24 @@ const LoginPage = () => {
           </div>
         }
       >
+        <div>
+          <a onClick={async () => {
+            try {
+              const res = await api.get("/api/hello");
+              if (res.status === 200) {
+                messageApi.success("连接成功！");
+              } else {
+                messageApi.error("连接失败！");
+              }
+            } catch (error) {
+              messageApi.error("连接失败！");
+              console.error("连接失败:", error);
+            }
+          }}>
+            test connect
+          </a>
+        </div>
+
         <NavLink to="/home" end>
           Hack!!!
         </NavLink>
