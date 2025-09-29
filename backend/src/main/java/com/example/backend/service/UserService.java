@@ -2,6 +2,8 @@ package com.example.backend.service;
 
 import com.example.backend.entity.User;
 import com.example.backend.repository.UserRepository;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -9,9 +11,11 @@ import java.util.Optional;
 @Service
 public class UserService {
     public final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
+        this.passwordEncoder = new BCryptPasswordEncoder(12);
     }
 
     // Register
@@ -23,18 +27,26 @@ public class UserService {
             throw new IllegalArgumentException("邮箱已存在");
         }
 
+        String encodedPassword = passwordEncoder.encode(password);
         User user = new User();
         user.setUsername(username);
         user.setEmail(email);
-        user.setPassword(password); // TODO:暂时明文存储，后续需加密
+        user.setPassword(encodedPassword);
 
         return userRepository.save(user);
     }
 
     // Login
-    public Optional<User> login(String name, String password) {
-        return userRepository.findByUsername(name)
-                .filter(u -> u.getPassword().equals(password));
+    public Optional<User> login(String username, String rawPassword) {
+        Optional<User> maybe = userRepository.findByUsername(username);
+        if (maybe.isPresent()) {
+            User u = maybe.get();
+            if (passwordEncoder.matches(rawPassword, u.getPassword())) {
+                return maybe;
+            }
+        }
+        return Optional.empty();
     }
+
 
 }
