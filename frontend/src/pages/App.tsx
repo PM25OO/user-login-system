@@ -189,27 +189,25 @@ const LoginPage = () => {
           </div>
         }
       >
-        <div>
-          <a onClick={async () => {
-            try {
-              const res = await api.get("/api/hello");
-              if (res.status === 200) {
-                messageApi.success("连接成功！");
-              } else {
-                messageApi.error("连接失败！");
-              }
-            } catch (error) {
+
+        <Button type="primary" shape="round" onClick={async () => {
+          try {
+            const res = await api.get("/api/hello");
+            if (res.status === 200) {
+              messageApi.success(res.data || "连接成功！");
+            } else {
               messageApi.error("连接失败！");
-              console.error("连接失败:", error);
             }
-          }}>
-            test connect
-          </a>
-        </div>
+          } catch (error) {
+            messageApi.error("连接失败！");
+            console.error("连接失败:", error);
+          }
+        }}>test connect</Button>
 
         <NavLink to="/home" end>
-          Hack!!!
+          <Button type="primary" shape="round" style={{ marginLeft: 16 }}>Hack!!!</Button>
         </NavLink>
+
         {accessType === 'login' && (
           <>
             <Tabs
