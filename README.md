@@ -68,6 +68,8 @@ user-login-system/
 │       ├── main/
 │       │   ├── java/com/example/backend/
 │       │   │   ├── BackendApplication.java   # 启动类
+│       │   │   ├── config/                   # 配置相关
+│       │   │   │   ├── SecurityConfig.java
 │       │   │   ├── controller/               # 控制器
 │       │   │   │   ├── HelloController.java  # GET /api/hello
 │       │   │   │   ├── TestController.java   # GET /api/testdata
@@ -143,6 +145,13 @@ user-login-system/
 spring.datasource.url=jdbc:mysql://localhost:3306/userdb?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
 spring.datasource.username=user
 spring.datasource.password=pass
+spring.security.user.name=user
+spring.security.user.password=user
+
+# ?? MySQL ??
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+
+# JPA ?????? JPA/Hibernate?
 spring.jpa.hibernate.ddl-auto=update
 spring.jpa.show-sql=true
 spring.jpa.database-platform=org.hibernate.dialect.MySQL8Dialect
@@ -189,7 +198,7 @@ spring.jpa.database-platform=org.hibernate.dialect.MySQL8Dialect
 - [x] 后端基础用户 CRUD 逻辑 (部分)
 - [x] 数据库容器化
 - [x] 前后端接口对接完善 (状态提示、错误展示)
-- [ ] 密码加密 (BCrypt)
+- [x] 密码加密 (BCrypt)
 - [ ] JWT 登录 / 刷新 / 退出
 - [ ] 统一异常与返回结构 (Result Wrapper)
 - [ ] DTO + 参数校验
