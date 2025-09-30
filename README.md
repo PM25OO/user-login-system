@@ -79,7 +79,9 @@ user-login-system/
 │       │   │   ├── repository/               # 数据访问
 │       │   │   │   └── UserRepository.java
 │       │   │   └── service/                  # 业务逻辑
-│       │   │       └── UserService.java
+│       │   │   │   └── UserService.java
+│       │   │   └── util/                     # 工具类
+│       │   │   │   └── JwtUtil.java
 │       │   └── resources/
 │       │       │   └── application.properties
 │       └── test/
@@ -111,9 +113,9 @@ user-login-system/
 
 ### 2. 认证相关 (UserController)
 | 方法 | 路径 | 请求 JSON | 响应 JSON (示例) |
-|------|------|----------|------------------|
+|------|------|:---------|------------------|
 | POST | /auth/register | `{ "username":"u", "email":"e@x.com", "password":"p" }` | `{ "success": true, "message": "Register successful" }` |
-| POST | /auth/login | `{ "username":"u", "password":"p" }` | `{ "success": true, "message": "Login success", "username": "u" }` |
+| POST | /auth/login | `{ "username":"u", "password":"p" }` | `{ "success": true, "message": "Login success", "username": "u", "token": "xxxxx.xxxxx.xxxxx" }` |
 
 错误示例：`{"success": false, "message": "Invalid username or password"}`
 
