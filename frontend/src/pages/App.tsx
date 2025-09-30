@@ -50,6 +50,7 @@ const LoginPage = () => {
         setTimeout(() => {
           navigate("/home");
         }, 750);
+        localStorage.setItem("token", res.data.token); // 记录后端返回的jwt token
       } else {
         messageApi.error("登录失败，请检查用户名和密码。");
       }
