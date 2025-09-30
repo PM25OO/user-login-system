@@ -3,6 +3,7 @@ package com.example.backend.controller;
 import com.example.backend.entity.User;
 import com.example.backend.repository.UserRepository;
 import com.example.backend.service.UserService;
+import com.example.backend.util.JwtUtil;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -55,15 +56,18 @@ public class UserController {
 
         Map<String, Object> response = new HashMap<>();
         if (user.isPresent()) {
+            String token = JwtUtil.generateToken(user.get().getUsername());
+
             response.put("success", true);
             response.put("message", "Login success");
             response.put("username", user.get().getUsername());
+            response.put("token", token);
         } else {
             response.put("success", false);
             response.put("message", "Invalid username or password");
         }
 
-        return response;  // Spring会自动转为JSON
+        return response;
     }
 
 
