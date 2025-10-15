@@ -105,11 +105,11 @@ user-login-system/
 ## 🔌 后端接口说明
 基地址：`http://localhost:8080`
 
-### 1. 健康/示例
+### 1. 测试/资源访问
 | 方法 | 路径 | 描述 | 响应示例 |
 |------|------|------|----------|
 | GET  | /api/hello | 测试接口 | `Hello from Spring Boot!` |
-| GET  | /api/testdata | 返回全部用户 | `[ { id, username, email, createdAt, ...}, ... ]` |
+| GET  | /api/protected | 返回全部用户数据 | `[ { id, username, email, createdAt, ...}, ... ]` |
 
 ### 2. 认证相关 (UserController)
 | 方法 | 路径 | 请求 JSON | 响应 JSON (示例) |
@@ -128,13 +128,14 @@ user-login-system/
 
 ## 🛡️ 安全与改进计划
 当前存在的安全/设计问题：
-1. 密码明文存储 → 应使用 BCrypt (`spring-boot-starter-security` 或单独引入 `spring-security-crypto`).
-2. 无 token / session → 建议使用 JWT（签发、刷新、黑名单可选）或 Spring Session。
-3. 缺少全局异常处理 → 建议新增 `@ControllerAdvice` 统一返回错误码。
-4. CORS 仅对特定控制器配置 → 统一通过 `WebMvcConfigurer` 或 Spring Security 配置。
-5. 无输入校验 → 使用 `jakarta.validation` (`@Valid`, `@NotBlank`) + DTO 分离实体。
-6. 无日志脱敏 & 审计 → 对登录失败/成功做审计记录。
-7. 直接返回实体列表 → 使用 DTO 屏蔽敏感字段（如密码）。
+
+- [x] 密码明文存储 → 应使用 BCrypt (`spring-boot-starter-security` 或单独引入 `spring-security-crypto`).
+- [x] 无 token / session → 建议使用 JWT（签发、刷新、黑名单可选）或 Spring Session。
+- [ ] 缺少全局异常处理 → 建议新增 `@ControllerAdvice` 统一返回错误码。
+- [ ] CORS 仅对特定控制器配置 → 统一通过 `WebMvcConfigurer` 或 Spring Security 配置。
+- [ ] 无输入校验 → 使用 `jakarta.validation` (`@Valid`, `@NotBlank`) + DTO 分离实体。
+- [ ] 无日志脱敏 & 审计 → 对登录失败/成功做审计记录。
+- [ ] 直接返回实体列表 → 使用 DTO 屏蔽敏感字段（如密码）。
 
 推荐下一步实施顺序：
 密码加密 → 登录颁发 JWT → 统一异常处理 → DTO + 校验 → 角色权限 → 日志审计。
@@ -201,7 +202,7 @@ spring.jpa.database-platform=org.hibernate.dialect.MySQL8Dialect
 - [x] 数据库容器化
 - [x] 前后端接口对接完善 (状态提示、错误展示)
 - [x] 密码加密 (BCrypt)
-- [ ] JWT 登录 / 刷新 / 退出
+- [x] JWT 登录 / 刷新 / 退出
 - [ ] 统一异常与返回结构 (Result Wrapper)
 - [ ] DTO + 参数校验
 - [ ] 简单权限 (ROLE_USER / ADMIN)
