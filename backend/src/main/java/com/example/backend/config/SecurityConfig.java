@@ -17,7 +17,7 @@ public class SecurityConfig {
 
                 // 配置请求权限
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/login", "/auth/register", "api/hello").permitAll() // 登录、注册放行
+                        .requestMatchers("/auth/login", "/auth/register", "api/hello" ,"api/protected").permitAll() // 登录、注册放行
 
                 );
 
