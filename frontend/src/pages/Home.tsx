@@ -1,11 +1,13 @@
-import { Button, message, Result } from 'antd';
+import { Button, message, Result, Table } from 'antd';
 import { useNavigate } from 'react-router';
 import api from '../api/api';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 const HomePage = () => {
   const navigate = useNavigate();
   const [messageApi, contextHolder] = message.useMessage();
+  const [accessPermission, setAccessPermission] = useState<boolean>(true);
+  const [userList, setUserList] = useState<any[]>([]);
 
   const visitData = async () => {
     try {
@@ -14,10 +16,19 @@ const HomePage = () => {
           Authorization: `Bearer ${localStorage.getItem("token")}`, // 从本地存储中获取token
         },
       });
-      console.log("Protected data:", res.data);
+      if (res.data?.success) {
+        messageApi.success(res.data?.message || "访问受保护资源成功！");
+        const users = res.data.database;
+        setUserList(users);
+        setAccessPermission(true);
+      } else {
+        messageApi.error(res.data?.message || "访问受保护资源失败，请重新登录。");
+        setAccessPermission(false);
+      }
     } catch (error: any) {
       messageApi.error("访问受保护资源失败，请重新登录。");
       console.error("Error accessing protected resource:", error);
+      setAccessPermission(false);
     }
   };
 
@@ -35,14 +46,28 @@ const HomePage = () => {
     }}>
       {contextHolder}
       <Result
-        status="success"
-        title="登录成功!"
-        subTitle="欢迎来到主页面"
+        status={accessPermission ? "success" : "error"}
+        title={accessPermission ? "登录成功!" : "请求失败"}
+        subTitle={accessPermission ? "欢迎来到主页面" : "请重新登录"}
         extra={[
           <Button type="primary" key="back" onClick={() => navigate('/login')}>
             返回登录页
           </Button>,
         ]}
+      />
+      <Table
+        dataSource={userList}
+        columns={[
+          { title: "ID", dataIndex: "id", key: "id" },
+          { title: "用户名", dataIndex: "username", key: "username" },
+          { title: "邮箱", dataIndex: "email", key: "email" },
+          { title: "操作", key: "action", render: () => (
+            <Button type="link" onClick={() => messageApi.info("功能待实现")}>
+              删除用户
+            </Button>
+          ) },
+        ]}
+        style={{ marginTop: 20 }}
       />
     </div>
   );
