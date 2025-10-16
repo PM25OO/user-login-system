@@ -1,12 +1,8 @@
 package com.example.backend.util;
 
-import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
 
 import javax.crypto.SecretKey;
-import java.security.Key;
 import java.util.Date;
 
 public class JwtUtil {
@@ -15,7 +11,7 @@ public class JwtUtil {
 
     public static String generateToken(String username) {
         long now = System.currentTimeMillis();
-        long expiry = 1000 * 60 * 15; // 15分钟有效期
+        long expiry = 1000 * 60 * 5; // w5分钟有效期
         return Jwts.builder()
                 .subject(username)
                 .issuedAt(new Date(now))
